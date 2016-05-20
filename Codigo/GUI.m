@@ -72,8 +72,8 @@ function varargout = GUI_OutputFcn(hObject, eventdata, handles)
 
 % Get default command line output from handles structure
 varargout{1} = handles.output;
-imshow('../imagenes/Nota-0.png');
-
+%imshow('../imagenes/Nota-0.png');
+imshow('C:\Users\Daniel\Downloads\ProyectoTIC-master\imagenes\Nota-0.png');
 
 % --- Executes on button press in nota.
 function nota_Callback(hObject, eventdata, handles)
@@ -87,7 +87,7 @@ set(handles.message,'string',str);
 %FIN GRABAR
 myRecording = getaudiodata(recObj);
 handles.myRecording = myRecording;
-imshow('../imagenes/Nota-1.png');
+%imshow('../imagenes/Nota-1.png');
 
 % --- Executes on button press in cancion.
 function cancion_Callback(hObject, eventdata, handles)
@@ -110,6 +110,8 @@ function archivo_Callback(hObject, eventdata, handles)
 s = strcat(PathName,FileName);
 [y,Fs] = audioread(s);
 sound(y,Fs);
+fmax = fftMax(y,Fs);
+getNote(fmax);
 
 
 % --- Executes on button press in archivoCancion.
