@@ -72,8 +72,8 @@ function varargout = GUI_OutputFcn(hObject, eventdata, handles)
 
 % Get default command line output from handles structure
 varargout{1} = handles.output;
-%imshow('../imagenes/Nota-0.png');
-imshow('C:\Users\Daniel\Downloads\ProyectoTIC-master\imagenes\Nota-0.png');
+imshow('../imagenes/Nota-0.png');
+%imshow('C:\Users\Daniel\Downloads\ProyectoTIC-master\imagenes\Nota-0.png');
 
 % --- Executes on button press in nota.
 function nota_Callback(hObject, eventdata, handles)
@@ -87,6 +87,8 @@ set(handles.message,'string',str);
 %FIN GRABAR
 myRecording = getaudiodata(recObj);
 handles.myRecording = myRecording;
+fmax = fftMax(myRecording,8000);
+getNote(fmax);
 %imshow('../imagenes/Nota-1.png');
 
 % --- Executes on button press in cancion.
@@ -95,13 +97,17 @@ recObj = audiorecorder; %Para grabar las notas individuales.
 %GRABANDO
 str='Grabando';
 set(handles.message,'string',str);
-recordblocking(recObj, 20);
+recordblocking(recObj, 10);
 str='';
 set(handles.message,'string',str);
 %FIN GRABAR
 myRecording = getaudiodata(recObj);
 handles.myRecording = myRecording;
-imshow('../imagenes/Nota-5.png');
+%getNotes(myRecording,8000);
+s = spectrogram(myRecording);
+disp(s);
+
+
 
 
 % --- Executes on button press in archivo.
@@ -120,3 +126,5 @@ function archivoCancion_Callback(hObject, eventdata, handles)
 s = strcat(PathName,FileName);
 [y,Fs] = audioread(s);
 sound(y,Fs);
+f = meanfreq(y,Fs,[763.99 800.0]);
+disp(f);

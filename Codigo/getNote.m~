@@ -7,7 +7,6 @@ FA = 698.46;
 FAS = 739.99;
 SOL = 783.99;
 LA = 880.0;
-LAS = 932.33;
 SI = 987.77;
 
 D = 20;
@@ -33,7 +32,7 @@ if(fMax >= MI-D && fMax <= MI+D)
 end 
 if(fMax >= FA-D && fMax <= FA+D)
     fprintf('La nota es Fa');
-    imshow('../imagenes/Nota-4.png');
+    imshow('..\imagenes\Nota-4.png');
     %imshow('C:\Users\Daniel\Downloads\ProyectoTIC-master\imagenes\Nota-2.png');
     Name = 'Fa';
 end
@@ -55,15 +54,9 @@ if(fMax >= LA-D && fMax <= LA+D)
     %imshow('C:\Users\Daniel\Downloads\ProyectoTIC-master\imagenes\Nota-2.png');
     Name = 'La';
 end 
-if(fMax >= LAS-D && fMax <= LAS+D)
-    fprintf('La nota es Las');
-    imshow('../imagenes/Nota-8.png');
-    %imshow('C:\Users\Daniel\Downloads\ProyectoTIC-master\imagenes\Nota-2.png');
-    Name = 'La#';
-end 
 if(fMax >= SI-D && fMax <= SI+D)
     fprintf('La nota es Si');
-    imshow('../imagenes/Nota-9.png');
+    imshow('..\imagenes\Nota-8.png');
     %imshow('C:\Users\Daniel\Downloads\ProyectoTIC-master\imagenes\Nota-2.png');
     Name = 'Si';
 end 
