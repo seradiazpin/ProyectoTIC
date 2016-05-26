@@ -1,29 +1,4 @@
 function varargout = GUI(varargin)
-% GUI MATLAB code for GUI.fig
-%      GUI, by itself, creates a new GUI or raises the existing
-%      singleton*.
-%
-%      H = GUI returns the handle to a new GUI or the handle to
-%      the existing singleton*.
-%
-%      GUI('CALLBACK',hObject,eventData,handles,...) calls the local
-%      function named CALLBACK in GUI.M with the given input arguments.
-%
-%      GUI('Property','Value',...) creates a new GUI or raises the
-%      existing singleton*.  Starting from the left, property value pairs are
-%      applied to the GUI before GUI_OpeningFcn gets called.  An
-%      unrecognized property name or invalid value makes property application
-%      stop.  All inputs are passed to GUI_OpeningFcn via varargin.
-%
-%      *See GUI Options on GUIDE's Tools menu.  Choose "GUI allows only one
-%      instance to run (singleton)".
-%
-% See also: GUIDE, GUIDATA, GUIHANDLES
-
-% Edit the above text to modify the response to help GUI
-
-% Last Modified by GUIDE v2.5 17-May-2016 16:17:44
-
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
 gui_State = struct('gui_Name',       mfilename, ...
@@ -64,20 +39,15 @@ guidata(hObject, handles);
 
 
 % --- Outputs from this function are returned to the command line.
+%Se inicializa la interfaz con una imagen de la escala de la flauta
 function varargout = GUI_OutputFcn(hObject, eventdata, handles) 
-% varargout  cell array for returning output args (see VARARGOUT);
-% hObject    handle to figure
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Get default command line output from handles structure
 varargout{1} = handles.output;
-imshow('../imagenes/Nota-0.png');
+imshow('../imagenes/final_final.png');
 %imshow('C:\Users\Daniel\Downloads\ProyectoTIC-master\imagenes\Nota-0.png');
 
-% --- Executes on button press in nota.
+% --- Boton para grabar las notas individuales
 function nota_Callback(hObject, eventdata, handles)
-recObj = audiorecorder; %Para grabar las notas individuales.
+recObj = audiorecorder;
 %GRABANDO
 str='Grabando';
 set(handles.message,'string',str);
@@ -85,46 +55,125 @@ recordblocking(recObj, 5);
 str='';
 set(handles.message,'string',str);
 %FIN GRABAR
+
+%Calcula la FFT y saca su pico maximo
 myRecording = getaudiodata(recObj);
 handles.myRecording = myRecording;
 fmax = fftMax(myRecording,8000);
 getNote(fmax);
+
+%Guarda los datos de la nota para reproducirlos si se desea.
+handles.myRecording = myRecording;
+handles.fsRec = 8000;
+guidata(hObject,handles)
 %imshow('../imagenes/Nota-1.png');
 
-% --- Executes on button press in cancion.
+% ---Boton para grabar canciones
 function cancion_Callback(hObject, eventdata, handles)
-recObj = audiorecorder; %Para grabar las notas individuales.
-%GRABANDO
-str='Grabando';
-set(handles.message,'string',str);
-recordblocking(recObj, 10);
-str='';
-set(handles.message,'string',str);
-%FIN GRABAR
-myRecording = getaudiodata(recObj);
-handles.myRecording = myRecording;
-%getNotes(myRecording,8000);
-s = spectrogram(myRecording);
-disp(s);
+recObj = audiorecorder;
+%Se mira el tiempo de grabacion sea menos de 20s si no
+%se saca error.
+tiempo = str2double(get(handles.timeSong,'String'));
+if tiempo <= 20.0
+    %GRABAR
+    str='Grabando';
+    set(handles.message,'string',str);
+    recordblocking(recObj, tiempo);
+    str='';
+    set(handles.message,'string',str);
+    %FIN GRABAR
+    myRecording = getaudiodata(recObj);
+
+    %Guarda los datos de la nota para reproducirlos si se desea.
+    handles.myRecording = myRecording;
+    handles.fsRec = 8000;
+    guidata(hObject,handles)
+    %getNotes(myRecording,8000);
+else
+    str='Tiempo mayor a 20 s, elegir tiempo menor';
+    set(handles.message,'string',str);
+    recordblocking(recObj, tiempo);
+end
 
 
 
 
-% --- Executes on button press in archivo.
+
+% --- Boton para subir un archivo de una nota 
 function archivo_Callback(hObject, eventdata, handles)
-[FileName,PathName] = uigetfile('*.wav','Seleccione la nota musical');
-s = strcat(PathName,FileName);
-[y,Fs] = audioread(s);
-sound(y,Fs);
-fmax = fftMax(y,Fs);
-getNote(fmax);
+%Se maneja el error 
+try
+    w = warning('query','last');
+    id = w.identifier;
+    warning('off',id);
+    
+    [FileName,PathName] = uigetfile('*.wav','Seleccione la nota musical');
+    s = strcat(PathName,FileName);
+    [y,Fs] = audioread(s);
+    fmax = fftMax(y,Fs);
+    getNote(fmax);
+    
+    
+    handles.myRecording = y;
+    handles.fsRec = Fs;
+    guidata(hObject,handles)
+    
+    str = '';
+    set(handles.errorFile,'string',str);
+catch ME
+    str = 'Error al leer el archivo';
+    set(handles.errorFile,'string',str);
+end
+    
 
 
 % --- Executes on button press in archivoCancion.
 function archivoCancion_Callback(hObject, eventdata, handles)
-[FileName,PathName] = uigetfile('*.wav','Seleccione la cancion');
-s = strcat(PathName,FileName);
-[y,Fs] = audioread(s);
-sound(y,Fs);
-f = meanfreq(y,Fs,[763.99 800.0]);
-disp(f);
+try
+    w = warning('query','last');
+    id = w.identifier;
+    warning('off',id);
+    
+    [FileName,PathName] = uigetfile('*.wav','Seleccione la cancion');
+    s = strcat(PathName,FileName);
+    [y,Fs] = audioread(s);
+    %sound(y,Fs);
+    spectrogram(y,100) 
+    
+    str = '';
+    set(handles.errorFile,'string',str);
+catch ME
+    str = 'Error al leer el archivo';
+    set(handles.errorFile,'string',str);
+end
+
+
+% --- Executes on button press in play.
+function play_Callback(hObject, eventdata, handles)
+% hObject    handle to play (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+sound(handles.myRecording,handles.fsRec);
+
+
+
+function timeSong_Callback(hObject, eventdata, handles)
+% hObject    handle to timeSong (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of timeSong as text
+%        str2double(get(hObject,'String')) returns contents of timeSong as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function timeSong_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to timeSong (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end

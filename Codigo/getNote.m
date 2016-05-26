@@ -11,62 +11,65 @@ LAS = 932.33;
 SI = 987.77;
 
 D = 20;
-disp(fMax);
 if(fMax >= DO-D && fMax <= DO+D)
-    fprintf('La nota es Do');
-    imshow('../imagenes/Nota-1.png');
+    w = warning('query','last');
+    id = w.identifier;
+    warning('off',id);
+    
+    %fprintf('La nota es Do');
     %imshow('C:\Users\Daniel\Downloads\ProyectoTIC-master\imagenes\Nota-1.png');
+    imshow('../imagenes/do.png');
+    
     Name = 'Do';
-end 
-
-if(fMax >= RE-D && fMax <= RE+D)
-    fprintf('La nota es Re');
-    imshow('../imagenes/Nota-2.png');
+elseif(fMax >= RE-D && fMax <= RE+D)
+    %fprintf('La nota es Re');
     %imshow('C:\Users\Daniel\Downloads\ProyectoTIC-master\imagenes\Nota-2.png');
+    imshow('../imagenes/re.png');
+    
     Name = 'Re';
-end
-if(fMax >= MI-D && fMax <= MI+D)
-    fprintf('La nota es Mi');
-    imshow('../imagenes/Nota-3.png');
+elseif(fMax >= MI-D && fMax <= MI+D)
+    %fprintf('La nota es Mi');
     %imshow('C:\Users\Daniel\Downloads\ProyectoTIC-master\imagenes\Nota-2.png');
+    
+    imshow('../imagenes/mi.png');
+    
     Name = 'Mi';
-end 
-if(fMax >= FA-D && fMax <= FA+D)
-    fprintf('La nota es Fa');
-    imshow('../imagenes/Nota-4.png');
+elseif(fMax >= FA-D && fMax <= FA+D)
+    %fprintf('La nota es Fa');
     %imshow('C:\Users\Daniel\Downloads\ProyectoTIC-master\imagenes\Nota-2.png');
+    imshow('../imagenes/fa.png');
     Name = 'Fa';
-end
-if(fMax >= FAS-D && fMax <= FAS+D)
-    fprintf('La nota es Fa#');
-    imshow('../imagenes/Nota-5.png');
+elseif(fMax >= FAS-D && fMax <= FAS+D)
+    %fprintf('La nota es Fa#');
     %imshow('C:\Users\Daniel\Downloads\ProyectoTIC-master\imagenes\Nota-2.png');
+    imshow('../imagenes/fa#.png');
+   
     Name = 'Fa#';
-end 
-if(fMax >= SOL-D && fMax <= SOL+D)
-    fprintf('La nota es Sol');
-    imshow('../imagenes/Nota-6.png');
+elseif(fMax >= SOL-D && fMax <= SOL+D)
+    %fprintf('La nota es Sol');
     %imshow('C:\Users\Daniel\Downloads\ProyectoTIC-master\imagenes\Nota-2.png');
+    imshow('../imagenes/sol.png');
     Name = 'Sol';
-end
-if(fMax >= LA-D && fMax <= LA+D)
-    fprintf('La nota es La');
-    imshow('../imagenes/Nota-7.png');
+elseif(fMax >= LA-D && fMax <= LA+D)
+    %fprintf('La nota es La');
     %imshow('C:\Users\Daniel\Downloads\ProyectoTIC-master\imagenes\Nota-2.png');
+    imshow('../imagenes/la.png');
     Name = 'La';
-end 
-if(fMax >= LAS-D && fMax <= LAS+D)
-    fprintf('La nota es Las');
-    imshow('../imagenes/Nota-8.png');
+elseif(fMax >= LAS-D && fMax <= LAS+D)
+    %fprintf('La nota es Las');
     %imshow('C:\Users\Daniel\Downloads\ProyectoTIC-master\imagenes\Nota-2.png');
     Name = 'La#';
-end 
-if(fMax >= SI-D && fMax <= SI+D)
-    fprintf('La nota es Si');
-    imshow('../imagenes/Nota-9.png');
+elseif(fMax >= SI-D && fMax <= SI+D)
+    %fprintf('La nota es Si');
     %imshow('C:\Users\Daniel\Downloads\ProyectoTIC-master\imagenes\Nota-2.png');
+    imshow('../imagenes/Si.png');
     Name = 'Si';
-end 
+else
+    %fprintf('No es una nota reconosible');
+    %imshow('C:\Users\Daniel\Downloads\ProyectoTIC-master\imagenes\Nota-2.png');
+    imshow('../imagenes/NOTA_MALA.png');
+    Name = 'Si';
+end
 
 end
 
